@@ -29,10 +29,10 @@ func main() {
 	switch choice {
 	case 1:
 		InputOutputHandler.InputHandler()
-		break
 	case 2:
 		app.ApiRequests()
-		break
+	default:
+		fmt.Println("Invalid choice")
 	}
 
 }

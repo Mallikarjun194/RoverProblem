@@ -22,5 +22,13 @@
 		"location": "3 3 E",
 		"command": "MMRMMRMR",
 		"roverPosition": "4 1 N"
+	},
+	{
+		"id": "9437",
+		"max_x": 5,
+		"max_y": 5,
+		"location": "1 2 N",
+		"command": "lmlmlmlmm",
+		"roverPosition": "1 3 N"
 	}
 ]

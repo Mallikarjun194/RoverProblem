@@ -19,8 +19,8 @@ import (
 var InputFile = "RoverPosition.json"
 
 func writeFile(b []byte) bool {
-	err3 := ioutil.WriteFile(InputFile, b, 0644)
-	if err3 != nil {
+	err := ioutil.WriteFile(InputFile, b, 0644)
+	if err != nil {
 		//fmt.Println("Error occur when writing to a file: %s", err3)
 		return false
 	}
@@ -34,7 +34,10 @@ func RoverPosition(w http.ResponseWriter, r *http.Request) {
 	//
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Printf("Reading body failed: %s", err)
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		Error.ErrorMsg = "Error while reading request body"
+		json.NewEncoder(w).Encode(&Error)
 		return
 	}
 	var RoverPro models.RoverProblem
@@ -54,7 +57,7 @@ func RoverPosition(w http.ResponseWriter, r *http.Request) {
 		location := RoverPro.Location
 		command := RoverPro.Command
 		print(MaxX, "\n", MaxY, "\n", location, "\n", command, "\n")
-		roverValues, err := RoverUtility.Rover(location)
+		roverValues, err := RoverUtility.RoverValidation(location)
 		if err != nil {
 			w.Header().Add("Content-Type", "application/json")
 			Error.ErrorMsg = "Invalid json payload error, Invalid Location " + location
@@ -79,7 +82,7 @@ func RoverPosition(w http.ResponseWriter, r *http.Request) {
 		if RoverUtility.X > MaxX || RoverUtility.Y > MaxY {
 			fmt.Println("Positions got exceeded ", RoverUtility.X, RoverUtility.Y)
 			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusNotAcceptable)
+			w.WriteHeader(http.StatusBadRequest)
 			Error.ErrorMsg = fmt.Sprintf("Positions got exceeded %d %d", RoverUtility.X, RoverUtility.Y)
 			json.NewEncoder(w).Encode(&Error)
 			return
@@ -97,6 +100,7 @@ func RoverPosition(w http.ResponseWriter, r *http.Request) {
 		b, err := json.MarshalIndent(RoverProb, "", "\t")
 		if err != nil {
 			fmt.Printf("Error occur when marshalling request data: %v", err)
+			return
 		}
 		if writeFile(b) {
 			w.Header().Add("Content-Type", "application/json")
@@ -134,9 +138,9 @@ func getRoverPositionById(w http.ResponseWriter, r *http.Request) {
 
 func ReadFile() {
 	if _, err := os.Stat(InputFile); err == nil {
-		content, err1 := ioutil.ReadFile(InputFile)
-		if err1 != nil {
-			fmt.Println("Error while opening file", err1)
+		content, err := ioutil.ReadFile(InputFile)
+		if err != nil {
+			fmt.Println("Error while opening file", err)
 		}
 		if len(content) > 0 {
 			err2 := json.Unmarshal(content, &RoverProb)

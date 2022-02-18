@@ -26,7 +26,7 @@ func InputHandler() {
 			location = scanner.Text()
 		}
 
-		roverValues, err := RoverUtility.Rover(location)
+		roverValues, err := RoverUtility.RoverValidation(location)
 		if err != nil {
 			outputs = append(outputs, fmt.Sprintf("Invalid location/co-ordinate %s", roverValues))
 			if ExitCheck() {

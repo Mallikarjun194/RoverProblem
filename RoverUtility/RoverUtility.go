@@ -11,7 +11,7 @@ var X int
 var Y int
 var Direction string
 
-func Rover(location string) ([]interface{}, error) {
+func RoverValidation(location string) ([]interface{}, error) {
 	roverValues := make([]interface{}, 0)
 
 	arr := strings.Split(location, " ")
@@ -20,10 +20,10 @@ func Rover(location string) ([]interface{}, error) {
 		fmt.Println("X must be digit", err)
 		return roverValues, err
 	}
-	Y, err1 := strconv.Atoi(arr[1])
-	if err1 != nil {
-		fmt.Println("Y must be digit", err1)
-		return roverValues, err1
+	Y, err := strconv.Atoi(arr[1])
+	if err != nil {
+		fmt.Println("Y must be digit", err)
+		return roverValues, err
 	}
 	Direction = arr[2]
 	Direction = strings.ToUpper(Direction)
@@ -31,8 +31,8 @@ func Rover(location string) ([]interface{}, error) {
 	expectedDirectionValues := []string{"N", "E", "W", "S"}
 	res := contains(expectedDirectionValues, Direction)
 	if !res {
-		fmt.Println(fmt.Sprintf("direction  %s is invalid", Direction))
-		return roverValues, errors.New("")
+		//fmt.Println(fmt.Sprintf("direction  %s is invalid", Direction))
+		return roverValues, errors.New("direction is invalid")
 	}
 	roverValues = append(roverValues, X)
 	roverValues = append(roverValues, Y)
@@ -46,19 +46,12 @@ func SpinLeft() {
 	switch Direction {
 	case "N":
 		Direction = "W"
-		break
 	case "W":
 		Direction = "S"
-		break
 	case "S":
 		Direction = "E"
-		break
 	case "E":
 		Direction = "N"
-		break
-	default:
-		fmt.Println("Invalid direction")
-		break
 	}
 }
 
@@ -67,19 +60,12 @@ func SpinRight() {
 	switch Direction {
 	case "N":
 		Direction = "E"
-		break
 	case "W":
 		Direction = "N"
-		break
 	case "S":
 		Direction = "W"
-		break
 	case "E":
 		Direction = "S"
-		break
-	default:
-		fmt.Println("Invalid direction")
-		break
 	}
 }
 
@@ -87,19 +73,12 @@ func MoveForward() {
 	switch Direction {
 	case "N":
 		Y += 1
-		break
 	case "W":
 		X -= 1
-		break
 	case "S":
 		Y -= 1
-		break
 	case "E":
 		X += 1
-		break
-	default:
-		fmt.Println("Invalid direction")
-		break
 	}
 }
 
@@ -109,16 +88,10 @@ func Move(RoverCommand string) {
 		switch s {
 		case "L":
 			SpinLeft()
-			break
 		case "R":
 			SpinRight()
-			break
 		case "M":
 			MoveForward()
-			break
-		default:
-			fmt.Println("Invalid direction")
-			break
 
 		}
 	}
