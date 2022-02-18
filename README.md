@@ -46,7 +46,7 @@ When we start running main.go, On CLI It will ask the user to choose the mode. I
 ###### WELCOME TO ROVER PROBLEM
 ###### ENTER YOUR CHOICE
 ###### PRESS 1 TO CONTINUE IN CLI MODE
-PRESS 2 TO CONTINUE IN RESTFUL MODE
+###### PRESS 2 TO CONTINUE IN RESTFUL MODE
 
 
 If the user selects 1 then application will run on CLI Mode.
